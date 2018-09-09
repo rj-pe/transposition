@@ -33,18 +33,19 @@ void encrypt(char *in, char *out)
   {
     /* TODO: ensure that this integer division works for inputs with odd length */
     int k = N / 2;
-    char arg1[k];
+    char arg1[N];
     int a1 = 0;
-    for(int i = k; i > 0; i--)
+    for(int i = (k-1); i >= 0; i--)
     {
-      arg1[a1++] = in[i];
+      arg1[a1] = in[i];
+      a1++;
     }
     int a2 = 0;
-    char arg2[k];
-    int i2 = N-1;
-    for(; i2 > k; i2--)
+    char arg2[N];
+    for(int i2 = (N-1); i2 >= k; i2--)
     {
-      arg2[a2++] = in[i2];
+      arg2[a2] = in[i2];
+      a2++;
     }
     encrypt(arg1, out);
     encrypt(arg2, out);
