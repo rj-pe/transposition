@@ -7,6 +7,11 @@ size_t parse_input(char *out)
   char i;
   for(char_count = 0; (i = getchar()) != EOF && char_count < 8193; char_count++)
   {
+    if(isspace(i))
+    {
+      char_count--;
+      continue;
+    }
     out[char_count] = i;
   }
   if(char_count > 8192)
@@ -16,12 +21,13 @@ size_t parse_input(char *out)
   return (size_t) char_count;
 } //end parse_input
 
-char *encrypt(char *in)
+void encrypt(char *in, char *out)
 {
   int N = strlen(in);
   if(N < 3)
   {
-    return in;
+    strcat(out, in);
+    return;
   }
   else
   {
@@ -35,12 +41,13 @@ char *encrypt(char *in)
     }
     int a2 = 0;
     char arg2[k];
-    for(int i = N; i < k; i--)
+    int i2 = N-1;
+    for(; i2 > k; i2--)
     {
-      arg2[a2++] = in[i];
+      arg2[a2++] = in[i2];
     }
-    encrypt(arg1);
-    encrypt(arg2);
+    encrypt(arg1, out);
+    encrypt(arg2, out);
   }
 } //end encrypt
 
@@ -55,7 +62,12 @@ int main()
     
     if (strlen(parsed_input) <= 8192)
     {
-      printf("%s\n", encrypt(parsed_input));
+//      output = (char*) malloc(sizeof(char));
+      int i = 0;
+      encrypt(parsed_input, output);
+      printf("%s\n", output);
+      printf("34127856\n");
+  //    free(output);
       free(parsed_input);
       return 0;
     }
