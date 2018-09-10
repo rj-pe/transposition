@@ -1,6 +1,7 @@
 // a simple transposition cipher
 #include "encrypt.h"
 
+/* places input from stdin into a char array, if input exceeds max size returns error message */
 size_t parse_input(char *out)
 {
   int char_count;
@@ -14,17 +15,18 @@ size_t parse_input(char *out)
     }
     out[char_count] = i;
   }
-  if(char_count > 8192)
+  if(char_count > MAXINPUT)
   {
     printf("input exceeds character limit! please try again:\n");
   }
   return (size_t) char_count;
 } //end parse_input
 
+/* encrypts plaintext, recursively builds ciphertext */
 void encrypt(char *in, char *out)
 {
-  int N = strlen(in);
-  if(N < 3)
+  int input_len = strlen(in);
+  if(input_len < 3)
   {
     strcat(out, in);
     return;
@@ -32,43 +34,39 @@ void encrypt(char *in, char *out)
   else
   {
     /* TODO: ensure that this integer division works for inputs with odd length */
-    int k = N / 2;
-    char arg1[N];
+    int k = input_len / 2;
+    char first_half[input_len];
+    char second_half[input_len];
     int a1 = 0;
-    for(int i = (k-1); i >= 0; i--)
+    int a2 = 0;
+    for(int i = (k - 1); i >= 0; i--)
     {
-      arg1[a1] = in[i];
+      first_half[a1] = in[i];
       a1++;
     }
-    int a2 = 0;
-    char arg2[N];
-    for(int i2 = (N-1); i2 >= k; i2--)
+    for(int i2 = (input_len - 1); i2 >= k; i2--)
     {
-      arg2[a2] = in[i2];
+      second_half[a2] = in[i2];
       a2++;
     }
-    encrypt(arg1, out);
-    encrypt(arg2, out);
+    encrypt(first_half, out);
+    encrypt(second_half, out);
   }
 } //end encrypt
 
-/* */
+/* given plaintext, input, returns ciphertext, output. */
 int main()
 {
   while(1)
   {
-    parsed_input = (char*) malloc( MAXINPUT * sizeof(char));
+    parsed_input = (char*) malloc(MAXINPUT * sizeof(char));
     input_size = parse_input(parsed_input);
     parsed_input = realloc(parsed_input, input_size * sizeof(char));
-    
     if (strlen(parsed_input) <= 8192)
     {
-//      output = (char*) malloc(sizeof(char));
       int i = 0;
       encrypt(parsed_input, output);
       printf("%s\n", output);
-      printf("34127856\n");
-  //    free(output);
       free(parsed_input);
       return 0;
     }

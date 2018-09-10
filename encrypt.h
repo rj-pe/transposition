@@ -6,8 +6,8 @@
 
 #define MAXINPUT 8192
 
+size_t input_size;
 char *parsed_input;
 char output[MAXINPUT];
 size_t parse_input(char *out);
- void encrypt(char *in, char *out);
-size_t input_size;
+void encrypt(char *in, char *out);
