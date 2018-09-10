@@ -8,7 +8,7 @@ size_t parse_input(char *out)
   char i;
   for(char_count = 0; (i = getchar()) != EOF && char_count < 8193; char_count++)
   {
-    if(isspace(i))
+    if(isspace(i) && (i == '\n'))
     {
       char_count--;
       continue;
@@ -23,9 +23,8 @@ size_t parse_input(char *out)
 } //end parse_input
 
 /* encrypts plaintext, recursively builds ciphertext */
-void encrypt(char *in, char *out)
+void encrypt(char *in, char *out, int input_len)
 {
-  int input_len = strlen(in);
   if(input_len < 3)
   {
     strcat(out, in);
@@ -35,8 +34,10 @@ void encrypt(char *in, char *out)
   {
     /* TODO: ensure that this integer division works for inputs with odd length */
     int k = input_len / 2;
-    char first_half[input_len];
-    char second_half[input_len];
+    char first_half[k + 1];
+    first_half[k+1] = '\0';
+    char second_half[input_len - (k)];
+    second_half[input_len - (k)] = '\0';
     int a1 = 0;
     int a2 = 0;
     for(int i = (k - 1); i >= 0; i--)
@@ -49,8 +50,10 @@ void encrypt(char *in, char *out)
       second_half[a2] = in[i2];
       a2++;
     }
-    encrypt(first_half, out);
-    encrypt(second_half, out);
+    int first_len = strlen(first_half);
+    int second_len = strlen(second_half);
+    encrypt(first_half, out, first_len);
+    encrypt(second_half, out, second_len);
   }
 } //end encrypt
 
@@ -65,7 +68,8 @@ int main()
     if (strlen(parsed_input) <= 8192)
     {
       int i = 0;
-      encrypt(parsed_input, output);
+      int in_length = strlen(parsed_input);
+      encrypt(parsed_input, output, in_length);
       printf("%s\n", output);
       free(parsed_input);
       return 0;

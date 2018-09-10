@@ -10,4 +10,4 @@ size_t input_size;
 char *parsed_input;
 char output[MAXINPUT];
 size_t parse_input(char *out);
-void encrypt(char *in, char *out);
+void encrypt(char *in, char *out, int input_len);
