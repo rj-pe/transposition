@@ -35,7 +35,7 @@ void encrypt(char *in, char *out, int input_len)
     /* TODO: ensure that this integer division works for inputs with odd length */
     int k = input_len / 2;
     char first_half[k + 1];
-    first_half[k+1] = '\0';
+    first_half[k] = '\0';
     char second_half[input_len - (k)];
     second_half[input_len - (k)] = '\0';
     int a1 = 0;
