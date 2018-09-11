@@ -70,6 +70,7 @@ int main()
       int i = 0;
       int in_length = strlen(parsed_input);
       encrypt(parsed_input, output, in_length);
+      printf("%ld\n", strlen(output));      
       printf("%s\n", output);
       free(parsed_input);
       return 0;
